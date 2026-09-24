@@ -1,71 +1,65 @@
 package com.fieldclinic.javabackend;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
 public class ImageController {
 
-    // 拍照识病（基础版：返回 Mock 数据）
+    // 从环境变量 AI_SERVICE_URL 读取，本地开发默认 http://localhost:8001
+    @Value("${ai.service.url:http://localhost:8001}")
+    private String aiServiceUrl;
+
+    private final RestTemplate restTemplate = new RestTemplate();
+
+    // 拍照识病
     @PostMapping("/disease/detect")
     public Map<String, Object> detectDisease(@RequestParam("file") MultipartFile file) {
-        // 打印一下文件信息，方便调试
-        System.out.println("收到图片：" + file.getOriginalFilename() + "，大小：" + file.getSize());
-
-        // 基础版：返回固定的 Mock 结果
-        // 后续升级：把 file 转发给 Python AI 服务 /ai/disease/detect
-        Map<String, Object> data = new HashMap<>();
-        data.put("crop", "番茄");
-        data.put("disease", "叶霉病");
-        data.put("confidence", 0.92);
-        data.put("symptoms", "叶片出现黄色斑块，叶片背面可能出现霉层。");
-        data.put("advice", "加强通风，合理控制田间湿度，并咨询当地植保部门。");
-        data.put("disclaimer", "AI识别结果仅供农业生产辅助参考，复杂或疑难情况建议咨询专业农技人员。");
-
-        Map<String, Object> res = new HashMap<>();
-        res.put("code", 0);
-        res.put("message", "success");
-        res.put("data", data);
-        return res;
+        return forwardToAi(aiServiceUrl + "/ai/disease/detect", file);
     }
 
-    // 拍照数果（基础版：返回 Mock 数据）
+    // 拍照数果
     @PostMapping("/fruit/count")
     public Map<String, Object> countFruit(@RequestParam("file") MultipartFile file) {
-        System.out.println("收到图片：" + file.getOriginalFilename() + "，大小：" + file.getSize());
-
-        // 基础版：返回固定的 Mock 结果（6 个果实，带框选坐标）
-        Map<String, Object> data = new HashMap<>();
-        data.put("count", 6);
-        List<Map<String, Object>> boxes = new ArrayList<>();
-        boxes.add(box(100, 120, 50, 50));
-        boxes.add(box(200, 140, 55, 55));
-        boxes.add(box(320, 130, 48, 48));
-        boxes.add(box(150, 250, 52, 52));
-        boxes.add(box(280, 260, 50, 50));
-        boxes.add(box(380, 280, 46, 46));
-        data.put("boxes", boxes);
-
-        Map<String, Object> res = new HashMap<>();
-        res.put("code", 0);
-        res.put("message", "success");
-        res.put("data", data);
-        return res;
+        return forwardToAi(aiServiceUrl + "/ai/fruit/count", file);
     }
 
-    private Map<String, Object> box(int x, int y, int w, int h) {
-        Map<String, Object> b = new HashMap<>();
-        b.put("x", x);
-        b.put("y", y);
-        b.put("w", w);
-        b.put("h", h);
-        b.put("score", 0.9);
-        return b;
+    // 把图片转发给 Python AI 服务，返回结果
+    @SuppressWarnings("unchecked")
+    private Map<String, Object> forwardToAi(String url, MultipartFile file) {
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+
+            ByteArrayResource resource = new ByteArrayResource(file.getBytes()) {
+                @Override
+                public String getFilename() {
+                    return file.getOriginalFilename();
+                }
+            };
+
+            MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
+            body.add("file", resource);
+
+            HttpEntity<MultiValueMap<String, Object>> request = new HttpEntity<>(body, headers);
+            return restTemplate.postForObject(url, request, Map.class);
+        } catch (Exception e) {
+            Map<String, Object> err = new HashMap<>();
+            err.put("code", 500);
+            err.put("message", "调用AI服务失败：" + e.getMessage());
+            return err;
+        }
     }
 }
