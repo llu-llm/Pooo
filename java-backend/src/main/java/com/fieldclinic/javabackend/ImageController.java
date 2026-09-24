@@ -11,6 +11,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api")
 public class ImageController {
+
     // 拍照识病（基础版：返回 Mock 数据）
     @PostMapping("/disease/detect")
     public Map<String, Object> detectDisease(@RequestParam("file") MultipartFile file) {
