@@ -6,18 +6,29 @@ services:
       MYSQL_ROOT_PASSWORD: root123456
       MYSQL_DATABASE: field_clinic
     ports:
-      - "3307:3306"    # 注意这里：左边是我们电脑的端口（改成3307），右边是容器内部的端口（固定3306）
+      - "3307:3306"
     volumes:
       - mysql_data:/var/lib/mysql
+    networks:
+      - field-net
 
-#  chroma:
-#    image: chromadb/chroma:latest
- #   container_name: field-chroma
-  #  ports:
-   #   - "8000:8000"
-   # volumes:
-    #  - chroma_data:/chroma/chroma
+  java-backend:
+    build: ../java-backend
+    container_name: field-java
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/field_clinic?useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root123456
+    depends_on:
+      - mysql
+    networks:
+      - field-net
 
 volumes:
   mysql_data:
-  chroma_data:
+
+networks:
+  field-net:
+    driver: bridge
