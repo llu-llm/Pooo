@@ -1,0 +1,23 @@
+services:
+  mysql:
+    image: mysql:8.4
+    container_name: field-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root123456
+      MYSQL_DATABASE: field_clinic
+    ports:
+      - "3307:3306"    # 注意这里：左边是我们电脑的端口（改成3307），右边是容器内部的端口（固定3306）
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+#  chroma:
+#    image: chromadb/chroma:latest
+ #   container_name: field-chroma
+  #  ports:
+   #   - "8000:8000"
+   # volumes:
+    #  - chroma_data:/chroma/chroma
+
+volumes:
+  mysql_data:
+  chroma_data:
