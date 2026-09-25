@@ -1,15 +1,16 @@
 {
   "pages": [
     "pages/index/index",
-    "pages/logs/logs"
+    "pages/disease/disease",
+    "pages/pesticide/pesticide",
+    "pages/fruit/fruit",
+    "pages/tasks/tasks"
   ],
   "window": {
-    "navigationBarTextStyle": "black",
-    "navigationBarTitleText": "Weixin",
-    "navigationBarBackgroundColor": "#ffffff"
+    "navigationBarTitleText": "田间诊",
+    "navigationBarBackgroundColor": "#4CAF50",
+    "navigationBarTextStyle": "white"
   },
   "style": "v2",
-  "componentFramework": "glass-easel",
-  "sitemapLocation": "sitemap.json",
-  "lazyCodeLoading": "requiredComponents"
+  "sitemapLocation": "sitemap.json"
 }
