@@ -1,66 +1,84 @@
-// pages/tasks/tasks.js
+const BASE_URL = 'http://localhost:8080';
+const USER_ID = 'test001';
+
 Page({
-
-  /**
-   * 页面的初始数据
-   */
   data: {
-
+    today: '',
+    tasks: []
   },
 
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad(options) {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady() {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
   onShow() {
-
+    const d = new Date();
+    const today = d.getFullYear() + '-' +
+      String(d.getMonth() + 1).padStart(2, '0') + '-' +
+      String(d.getDate()).padStart(2, '0');
+    this.setData({ today });
+    this.loadTasks();
   },
 
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide() {
-
+  loadTasks() {
+    wx.request({
+      url: BASE_URL + '/api/tasks?userId=' + USER_ID + '&date=' + this.data.today,
+      method: 'GET',
+      success: (res) => {
+        if (res.data.code === 0) {
+          this.setData({ tasks: res.data.data });
+        }
+      }
+    });
   },
 
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload() {
-
+  onComplete(e) {
+    const id = e.currentTarget.dataset.id;
+    wx.request({
+      url: BASE_URL + '/api/tasks/' + id + '/complete',
+      method: 'PUT',
+      success: () => this.loadTasks()
+    });
   },
 
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh() {
-
+  onDelete(e) {
+    const id = e.currentTarget.dataset.id;
+    wx.showModal({
+      title: '确认删除',
+      content: '确定删除这条任务吗？',
+      success: (res) => {
+        if (res.confirm) {
+          wx.request({
+            url: BASE_URL + '/api/tasks/' + id,
+            method: 'DELETE',
+            success: () => this.loadTasks()
+          });
+        }
+      }
+    });
   },
 
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom() {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage() {
-
+  onAdd() {
+    wx.showModal({
+      title: '添加任务',
+      editable: true,
+      placeholderText: '请输入任务标题，如：检查番茄植株',
+      success: (res) => {
+        if (res.confirm && res.content) {
+          const d = new Date();
+          const time = String(d.getHours()).padStart(2, '0') + ':' +
+                       String(d.getMinutes()).padStart(2, '0');
+          wx.request({
+            url: BASE_URL + '/api/tasks',
+            method: 'POST',
+            header: { 'Content-Type': 'application/json' },
+            data: {
+              userId: USER_ID,
+              title: res.content,
+              taskDate: this.data.today,
+              taskTime: time,
+              status: 0
+            },
+            success: () => this.loadTasks()
+          });
+        }
+      }
+    });
   }
-})
+});
