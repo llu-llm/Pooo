@@ -1,66 +1,51 @@
-// pages/fruit/fruit.js
+const BASE_URL = 'http://localhost:8080';
+
 Page({
-
-  /**
-   * 页面的初始数据
-   */
   data: {
-
+    imagePath: '',
+    loading: false,
+    result: null
   },
 
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad(options) {
-
+  onChooseImage() {
+    wx.chooseMedia({
+      count: 1,
+      mediaType: ['image'],
+      sourceType: ['camera', 'album'],
+      success: (res) => {
+        const path = res.tempFiles[0].tempFilePath;
+        this.setData({
+          imagePath: path,
+          result: null
+        });
+        this.uploadImage(path);
+      }
+    });
   },
 
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady() {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow() {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide() {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload() {
-
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh() {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom() {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage() {
-
+  uploadImage(filePath) {
+    this.setData({ loading: true });
+    wx.uploadFile({
+      url: BASE_URL + '/api/fruit/count',
+      filePath: filePath,
+      name: 'file',
+      success: (res) => {
+        this.setData({ loading: false });
+        try {
+          const data = JSON.parse(res.data);
+          if (data.code === 0) {
+            this.setData({ result: data.data });
+          } else {
+            wx.showToast({ title: '识别失败：' + data.message, icon: 'none' });
+          }
+        } catch (e) {
+          wx.showToast({ title: '解析结果失败', icon: 'none' });
+        }
+      },
+      fail: () => {
+        this.setData({ loading: false });
+        wx.showToast({ title: '上传失败，请检查后端', icon: 'none' });
+      }
+    });
   }
-})
+});

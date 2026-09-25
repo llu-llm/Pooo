@@ -1,2 +1,32 @@
-<!--pages/fruit/fruit.wxml-->
-<text>pages/fruit/fruit.wxml</text>
+<view class="container">
+  <view class="header">
+    <text class="title">拍照数果</text>
+    <text class="subtitle">上传果树图片，AI 自动统计果实数量</text>
+  </view>
+
+  <view class="upload-area" bindtap="onChooseImage" wx:if="{{!imagePath}}">
+    <view class="upload-icon">📷</view>
+    <text class="upload-text">点击拍照 / 从相册选择</text>
+  </view>
+
+  <view class="preview" wx:if="{{imagePath}}">
+    <image class="preview-img" src="{{imagePath}}" mode="widthFix" />
+    <view class="btn-rechoose" bindtap="onChooseImage">重新选择</view>
+  </view>
+
+  <view class="loading" wx:if="{{loading}}">
+    <text>AI 识别中，请稍候...</text>
+  </view>
+
+  <view class="result" wx:if="{{result}}">
+    <view class="count-area">
+      <text class="count-label">检测到果实</text>
+      <text class="count-num">{{result.count}}</text>
+      <text class="count-unit">个</text>
+    </view>
+
+    <view class="box-info" wx:if="{{result.boxes && result.boxes.length > 0}}">
+      <text class="box-title">检测框数量：{{result.boxes.length}}</text>
+    </view>
+  </view>
+</view>
