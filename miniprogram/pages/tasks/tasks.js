@@ -1,4 +1,3 @@
-const BASE_URL = 'http://localhost:8080';
 const USER_ID = 'test001';
 
 Page({
@@ -18,7 +17,7 @@ Page({
 
   loadTasks() {
     wx.request({
-      url: BASE_URL + '/api/tasks?userId=' + USER_ID + '&date=' + this.data.today,
+      url: getApp().globalData.BASE_URL + '/api/tasks?userId=' + USER_ID + '&date=' + this.data.today,
       method: 'GET',
       success: (res) => {
         if (res.data.code === 0) {
@@ -31,7 +30,7 @@ Page({
   onComplete(e) {
     const id = e.currentTarget.dataset.id;
     wx.request({
-      url: BASE_URL + '/api/tasks/' + id + '/complete',
+      url: getApp().globalData.BASE_URL + '/api/tasks/' + id + '/complete',
       method: 'PUT',
       success: () => this.loadTasks()
     });
@@ -45,7 +44,7 @@ Page({
       success: (res) => {
         if (res.confirm) {
           wx.request({
-            url: BASE_URL + '/api/tasks/' + id,
+            url: getApp().globalData.BASE_URL + '/api/tasks/' + id,
             method: 'DELETE',
             success: () => this.loadTasks()
           });
@@ -65,7 +64,7 @@ Page({
           const time = String(d.getHours()).padStart(2, '0') + ':' +
                        String(d.getMinutes()).padStart(2, '0');
           wx.request({
-            url: BASE_URL + '/api/tasks',
+            url: getApp().globalData.BASE_URL + '/api/tasks',
             method: 'POST',
             header: { 'Content-Type': 'application/json' },
             data: {

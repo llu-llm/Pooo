@@ -1,5 +1,3 @@
-const BASE_URL = 'http://localhost:8080';
-
 Page({
   data: {
     imagePath: '',
@@ -26,7 +24,7 @@ Page({
   uploadImage(filePath) {
     this.setData({ loading: true });
     wx.uploadFile({
-      url: BASE_URL + '/api/fruit/count',
+      url: getApp().globalData.BASE_URL + '/api/fruit/count',
       filePath: filePath,
       name: 'file',
       success: (res) => {

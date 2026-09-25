@@ -32,7 +32,7 @@ Page({
     wx.showLoading({ title: '计算中...' });
 
     wx.request({
-      url: 'http://localhost:8080/api/pesticide/calc',
+      url: getApp().globalData.BASE_URL + '/api/pesticide/calc',
       method: 'POST',
       header: { 'Content-Type': 'application/json' },
       data: {
