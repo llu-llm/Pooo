@@ -1,2 +1,41 @@
-<!--pages/disease/disease.wxml-->
-<text>pages/disease/disease.wxml</text>
+<view class="container">
+  <view class="header">
+    <text class="title">拍照识病</text>
+    <text class="subtitle">上传作物图片，AI 帮你识别病虫害</text>
+  </view>
+
+  <view class="upload-area" bindtap="onChooseImage" wx:if="{{!imagePath}}">
+    <view class="upload-icon">📷</view>
+    <text class="upload-text">点击拍照 / 从相册选择</text>
+  </view>
+
+  <view class="preview" wx:if="{{imagePath}}">
+    <image class="preview-img" src="{{imagePath}}" mode="widthFix" />
+    <view class="btn-rechoose" bindtap="onChooseImage">重新选择</view>
+  </view>
+
+  <view class="loading" wx:if="{{loading}}">
+    <text>AI 识别中，请稍候...</text>
+  </view>
+
+  <view class="result" wx:if="{{result}}">
+    <view class="result-title">{{result.crop}} · {{result.disease}}</view>
+
+    <view class="result-row">
+      <text class="label">置信度</text>
+      <text class="value">{{result.confidence}}</text>
+    </view>
+
+    <view class="result-block">
+      <text class="block-title">主要症状</text>
+      <text class="block-text">{{result.symptoms}}</text>
+    </view>
+
+    <view class="result-block">
+      <text class="block-title">处理建议</text>
+      <text class="block-text">{{result.advice}}</text>
+    </view>
+
+    <view class="disclaimer">{{result.disclaimer}}</view>
+  </view>
+</view>
