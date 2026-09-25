@@ -1,0 +1,16 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/disease/disease",
+    "pages/pesticide/pesticide",
+    "pages/fruit/fruit",
+    "pages/tasks/tasks"
+  ],
+  "window": {
+    "navigationBarTitleText": "田间诊",
+    "navigationBarBackgroundColor": "#4CAF50",
+    "navigationBarTextStyle": "white"
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

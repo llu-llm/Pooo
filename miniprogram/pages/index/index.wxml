@@ -1,0 +1,28 @@
+<view class="container">
+  <view class="header">
+    <text class="title">田间诊</text>
+    <text class="subtitle">AI农业生产辅助</text>
+  </view>
+
+  <view class="grid">
+    <view class="cell" bindtap="goDisease">
+      <view class="icon">📷</view>
+      <view class="label">拍照识病</view>
+    </view>
+
+    <view class="cell" bindtap="goPesticide">
+      <view class="icon">💧</view>
+      <view class="label">农药兑水</view>
+    </view>
+
+    <view class="cell" bindtap="goFruit">
+      <view class="icon">🍎</view>
+      <view class="label">拍照数果</view>
+    </view>
+
+    <view class="cell" bindtap="goTasks">
+      <view class="icon">📋</view>
+      <view class="label">今日农事</view>
+    </view>
+  </view>
+</view>
