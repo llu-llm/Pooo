@@ -25,6 +25,7 @@ services:
     depends_on:
       - mysql
       - python-agents
+    restart: on-failure
     networks:
       - field-net
 

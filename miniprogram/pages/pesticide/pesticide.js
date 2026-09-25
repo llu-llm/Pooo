@@ -1,66 +1,57 @@
-// pages/pesticide/pesticide.js
 Page({
-
-  /**
-   * 页面的初始数据
-   */
   data: {
-
+    ratio: '',
+    volume: '',
+    result: null
   },
 
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad(options) {
-
+  onRatioInput(e) {
+    this.setData({ ratio: e.detail.value });
   },
 
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady() {
-
+  onVolumeInput(e) {
+    this.setData({ volume: e.detail.value });
   },
 
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow() {
+  onCalc() {
+    let { ratio, volume } = this.data;
 
-  },
+    if (!ratio || !volume) {
+      wx.showToast({ title: '请填写完整', icon: 'none' });
+      return;
+    }
 
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide() {
+    ratio = ratio.replace(/：/g, ':').replace(/\s/g, '');
+    const ratioNum = ratio.split(':').pop();
 
-  },
+    if (!ratioNum || isNaN(Number(ratioNum))) {
+      wx.showToast({ title: '比例格式不对，例如 1:500', icon: 'none' });
+      return;
+    }
 
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload() {
+    wx.showLoading({ title: '计算中...' });
 
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh() {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom() {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage() {
-
+    wx.request({
+      url: 'http://localhost:8080/api/pesticide/calc',
+      method: 'POST',
+      header: { 'Content-Type': 'application/json' },
+      data: {
+        ratio: ratioNum,
+        targetVolume: Number(volume),
+        volumeUnit: 'L'
+      },
+      success: (res) => {
+        wx.hideLoading();
+        if (res.data.code === 0) {
+          this.setData({ result: res.data.data });
+        } else {
+          wx.showToast({ title: '计算失败：' + res.data.message, icon: 'none' });
+        }
+      },
+      fail: () => {
+        wx.hideLoading();
+        wx.showToast({ title: '请求失败', icon: 'none' });
+      }
+    });
   }
-})
+});

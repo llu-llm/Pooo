@@ -1,8 +1,8 @@
 {
   "pages": [
+    "pages/pesticide/pesticide",
     "pages/index/index",
     "pages/disease/disease",
-    "pages/pesticide/pesticide",
     "pages/fruit/fruit",
     "pages/tasks/tasks"
   ],
