@@ -1,3 +1,4 @@
+// git测试123
 Page({
   goDisease() {
     wx.navigateTo({ url: '/pages/disease/disease' });
