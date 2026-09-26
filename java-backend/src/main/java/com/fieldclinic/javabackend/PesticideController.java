@@ -12,53 +12,55 @@ public class PesticideController {
     @PostMapping("/calc")
     public Map<String, Object> calc(@RequestBody Map<String, Object> body) {
         try {
-            // 1. 预处理：中文冒号转英文冒号，去掉所有空格
-            String ratioStr = String.valueOf(body.getOrDefault("ratio", "1:500"))
-                    .replace("：", ":")
-                    .replace(" ", "")
-                    .trim();
+            // 1. 解析倍数（兼容 "1:500"、"500"、中文冒号、空格）
+            String ratioStr = String.valueOf(body.getOrDefault("ratio", "500"))
+                    .replace("：", ":").replace(" ", "").trim();
 
-            // 2. 解析比例，兼容 "1:500" 和 "500"
             int ratioDenominator;
             if (ratioStr.contains(":")) {
                 String[] parts = ratioStr.split(":");
-                if (parts.length < 2) {
-                    return error(400, "比例格式不正确，应为 1:500");
-                }
+                if (parts.length < 2) return error(400, "比例格式不正确，应为 1:500");
                 ratioDenominator = Integer.parseInt(parts[1]);
             } else {
                 ratioDenominator = Integer.parseInt(ratioStr);
             }
 
-            if (ratioDenominator <= 0) {
-                return error(400, "比例分母必须大于 0");
+            // 2. 倍数范围校验：50-5000
+            if (ratioDenominator < 50 || ratioDenominator > 5000) {
+                return error(400, "稀释倍数必须在 50-5000 之间");
             }
 
             // 3. 解析目标药液量
             double targetVolume = Double.parseDouble(
                     String.valueOf(body.getOrDefault("targetVolume", 10)).replace(" ", ""));
-            if (targetVolume <= 0) {
-                return error(400, "目标药液量必须大于 0");
+            if (targetVolume <= 0 || targetVolume > 100) {
+                return error(400, "药液量必须大于 0 且不超过 100L");
             }
             String volumeUnit = String.valueOf(body.getOrDefault("volumeUnit", "L")).trim();
 
-            // 4. 统一换算成 mL
+            // 4. 药剂单位（g 或 mL）—— 农药类型
+            String pesticideUnit = String.valueOf(body.getOrDefault("pesticideUnit", "mL")).trim();
+            if (!"g".equalsIgnoreCase(pesticideUnit) && !"mL".equalsIgnoreCase(pesticideUnit)) {
+                pesticideUnit = "mL";
+            }
+
+            // 5. 统一换算成 mL 或 g
             double targetVolumeMl = "mL".equalsIgnoreCase(volumeUnit) ? targetVolume : targetVolume * 1000;
 
-            // 5. 计算药剂用量
-            double pesticideMl = targetVolumeMl / ratioDenominator;
-            double waterMl = targetVolumeMl - pesticideMl;
+            // 6. 计算药剂
+            double pesticideAmount = targetVolumeMl / ratioDenominator;
+            double waterMl = targetVolumeMl - pesticideAmount;
             double waterL = waterMl / 1000.0;
 
-            // 6. 组装返回
+            // 7. 组装返回
             Map<String, Object> data = new HashMap<>();
-            data.put("pesticideAmount", Math.round(pesticideMl * 100.0) / 100.0);
-            data.put("pesticideUnit", "mL");
+            data.put("pesticideAmount", Math.round(pesticideAmount * 100.0) / 100.0);
+            data.put("pesticideUnit", pesticideUnit);
             data.put("waterAmount", Math.round(waterL * 100.0) / 100.0);
             data.put("waterUnit", "L");
             data.put("ratioUsed", "1:" + ratioDenominator);
             data.put("targetVolume", targetVolume + volumeUnit);
-            data.put("disclaimer", "农药使用量、稀释倍数和安全间隔期应以产品标签及当地农业技术部门指导为准，不同药剂不可直接套用相同兑水比例。");
+            data.put("disclaimer", "本结果仅依据兑水比例进行数学计算，请以农药产品标签和当地植保部门指导为准。");
 
             Map<String, Object> res = new HashMap<>();
             res.put("code", 0);
