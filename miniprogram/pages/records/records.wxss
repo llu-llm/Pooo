@@ -1,0 +1,154 @@
+.container {
+  padding: 30rpx;
+  background: #f5f9f5;
+  min-height: 100vh;
+  padding-bottom: 200rpx;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30rpx;
+}
+
+.date {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #2e7d32;
+}
+
+.count {
+  font-size: 26rpx;
+  color: #999;
+}
+
+.empty {
+  text-align: center;
+  padding: 120rpx 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.empty text {
+  font-size: 28rpx;
+  color: #999;
+}
+
+.empty .hint {
+  font-size: 24rpx;
+  color: #bbb;
+  margin-top: 16rpx;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+}
+
+.item {
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 24rpx 30rpx;
+  margin-bottom: 20rpx;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.item.done {
+  opacity: 0.5;
+}
+
+.item.done .title {
+  text-decoration: line-through;
+}
+
+.item-left {
+  flex: 1;
+}
+
+.item-top {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10rpx;
+}
+
+.time {
+  font-size: 24rpx;
+  color: #4CAF50;
+  margin-right: 16rpx;
+}
+
+.category {
+  font-size: 22rpx;
+  color: #fff;
+  background: #4CAF50;
+  padding: 2rpx 14rpx;
+  border-radius: 20rpx;
+}
+
+.title {
+  display: block;
+  font-size: 32rpx;
+  color: #333;
+  margin-bottom: 8rpx;
+}
+
+.content {
+  display: block;
+  font-size: 26rpx;
+  color: #999;
+  line-height: 1.5;
+}
+
+.item-right {
+  padding-left: 20rpx;
+}
+
+.input-type {
+  font-size: 36rpx;
+}
+
+.bottom-bar {
+  position: fixed;
+  bottom: 40rpx;
+  left: 30rpx;
+  right: 30rpx;
+  display: flex;
+}
+
+.btn-voice, .btn-manual {
+  flex: 1;
+  height: 100rpx;
+  border-radius: 50rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-voice {
+  background: #4CAF50;
+  box-shadow: 0 4rpx 20rpx rgba(76, 175, 80, 0.4);
+  margin-right: 20rpx;
+}
+
+.btn-manual {
+  background: #fff;
+  border: 2rpx solid #4CAF50;
+}
+
+.btn-icon {
+  font-size: 36rpx;
+  margin-right: 10rpx;
+}
+
+.btn-text {
+  font-size: 30rpx;
+  color: #fff;
+}
+
+.btn-manual .btn-text {
+  color: #4CAF50;
+}
