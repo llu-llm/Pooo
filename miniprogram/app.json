@@ -1,10 +1,11 @@
 {
   "pages": [
+    "pages/disease/disease",
     "pages/fruit/fruit",
     "pages/pesticide/pesticide",
     "pages/records/records",
     "pages/index/index",
-    "pages/disease/disease",
+    
     
     "pages/tasks/tasks",
     "pages/records/record-edit/record-edit",
