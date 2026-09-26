@@ -1,3 +1,5 @@
+const USER_ID = 'test001';
+
 Page({
   data: {
     imagePath: '',
@@ -29,6 +31,9 @@ Page({
       url: getApp().globalData.BASE_URL + '/api/fruit/count',
       filePath: filePath,
       name: 'file',
+      formData: {
+        userId: USER_ID                                    // ← 新增 userId
+      },
       success: (res) => {
         this.setData({ loading: false });
         try {
@@ -36,7 +41,6 @@ Page({
           if (data.code === 0) {
             this.setData({ result: data.data });
 
-            // 质量检测提示：数量为 0 时提醒用户图片可能有问题
             if (!data.data.count || data.data.count === 0) {
               this.setData({ qualityTip: '未检测到果实，请检查图片是否模糊、过暗或主体过小' });
             } else {

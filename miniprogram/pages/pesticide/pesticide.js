@@ -9,21 +9,10 @@ Page({
     result: null
   },
 
-  onRatioInput(e) {
-    this.setData({ ratio: e.detail.value });
-  },
-
-  onVolumeInput(e) {
-    this.setData({ volume: e.detail.value });
-  },
-
-  onVolumeUnitChange(e) {
-    this.setData({ volumeUnitIndex: e.detail.value });
-  },
-
-  onWeightUnitChange(e) {
-    this.setData({ weightUnitIndex: e.detail.value });
-  },
+  onRatioInput(e) { this.setData({ ratio: e.detail.value }); },
+  onVolumeInput(e) { this.setData({ volume: e.detail.value }); },
+  onVolumeUnitChange(e) { this.setData({ volumeUnitIndex: e.detail.value }); },
+  onWeightUnitChange(e) { this.setData({ weightUnitIndex: e.detail.value }); },
 
   onCalc() {
     let { ratio, volume, volumeUnits, volumeUnitIndex, weightUnits, weightUnitIndex } = this.data;
@@ -33,7 +22,6 @@ Page({
       return;
     }
 
-    // 统一处理：中文冒号转英文，去掉空格
     ratio = ratio.replace(/：/g, ':').replace(/\s/g, '');
     const ratioNum = ratio.split(':').pop();
 
@@ -63,26 +51,23 @@ Page({
         ratio: ratioNum,
         targetVolume: v,
         volumeUnit: volumeUnits[volumeUnitIndex],
-        weightUnit: weightUnits[weightUnitIndex]
+        pesticideUnit: weightUnits[weightUnitIndex]   // ← 改成 pesticideUnit
       },
       success: (res) => {
         wx.hideLoading();
         if (res.data.code === 0) {
           this.setData({ result: res.data.data });
         } else {
-          // 后端失败时用离线兜底
           this.offlineCalc(ratioNum, v, volumeUnits[volumeUnitIndex], weightUnits[weightUnitIndex]);
         }
       },
       fail: () => {
         wx.hideLoading();
-        // 后端连不上时用离线兜底
         this.offlineCalc(ratioNum, v, volumeUnits[volumeUnitIndex], weightUnits[weightUnitIndex]);
       }
     });
   },
 
-  // 离线计算兜底
   offlineCalc(ratioNum, volume, volumeUnit, weightUnit) {
     const targetMl = volumeUnit === 'mL' ? volume : volume * 1000;
     const pesticideMl = targetMl / Number(ratioNum);

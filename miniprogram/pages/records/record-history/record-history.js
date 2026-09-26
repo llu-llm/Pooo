@@ -11,7 +11,7 @@ Page({
 
   loadHistory() {
     wx.request({
-      url: getApp().globalData.BASE_URL + '/api/records?userId=' + USER_ID,
+      url: getApp().globalData.BASE_URL + '/api/records/history?userId=' + USER_ID,
       method: 'GET',
       success: (res) => {
         if (res.data.code === 0) {
@@ -19,7 +19,6 @@ Page({
         }
       },
       fail: () => {
-        // 后端未上线时先展示空
         this.setData({ groups: [] });
       }
     });

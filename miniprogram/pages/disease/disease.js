@@ -1,3 +1,5 @@
+const USER_ID = 'test001';
+
 Page({
   data: {
     imagePath: '',
@@ -40,6 +42,7 @@ Page({
       filePath: filePath,
       name: 'file',
       formData: {
+        userId: USER_ID,                                    // ← 新增 userId
         crop: this.data.crops[this.data.cropIndex]
       },
       success: (res) => {
@@ -64,7 +67,7 @@ Page({
 
   handleResult(data) {
     let candidates = [];
-  
+
     if (data.candidates && data.candidates.length > 0) {
       candidates = data.candidates;
     } else if (data.disease) {
@@ -77,22 +80,33 @@ Page({
         disclaimer: data.disclaimer
       }];
     }
-  
+
     if (candidates.length === 0) {
       this.setData({ qualityTip: '未识别出病害，请检查图片是否模糊、过暗或主体过小' });
       return;
     }
-  
-    // 给每个候选加上 confidencePercent 字段
+
     candidates = candidates.map(c => ({
       ...c,
       confidencePercent: Math.round((c.confidence || 0) * 100)
     }));
-  
+
     this.setData({
       candidates: candidates,
       activeIndex: 0,
       current: candidates[0]
     });
   },
+
+  onCandidateTap(e) {
+    const index = e.currentTarget.dataset.index;
+    this.setData({
+      activeIndex: index,
+      current: this.data.candidates[index]
+    });
+  },
+
+  goHistory() {
+    wx.navigateTo({ url: '/pages/records/record-history/record-history?type=disease' });
+  }
 });
