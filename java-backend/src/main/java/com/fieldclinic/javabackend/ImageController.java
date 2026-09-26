@@ -1,5 +1,6 @@
 package com.fieldclinic.javabackend;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpEntity;
@@ -18,25 +19,30 @@ import java.util.Map;
 @RequestMapping("/api")
 public class ImageController {
 
-    // 从环境变量 AI_SERVICE_URL 读取，本地开发默认 http://localhost:8001
     @Value("${ai.service.url:http://localhost:8001}")
     private String aiServiceUrl;
 
+    @Autowired
+    private DetectRecordRepository detectRecordRepository;
+
     private final RestTemplate restTemplate = new RestTemplate();
 
-    // 拍照识病
     @PostMapping("/disease/detect")
-    public Map<String, Object> detectDisease(@RequestParam("file") MultipartFile file) {
-        return forwardToAi(aiServiceUrl + "/ai/disease/detect", file);
+    public Map<String, Object> detectDisease(@RequestParam("file") MultipartFile file,
+                                             @RequestParam(required = false) String userId) {
+        Map<String, Object> result = forwardToAi(aiServiceUrl + "/ai/disease/detect", file);
+        saveRecord(userId, "disease", result);
+        return result;
     }
 
-    // 拍照数果
     @PostMapping("/fruit/count")
-    public Map<String, Object> countFruit(@RequestParam("file") MultipartFile file) {
-        return forwardToAi(aiServiceUrl + "/ai/fruit/count", file);
+    public Map<String, Object> countFruit(@RequestParam("file") MultipartFile file,
+                                          @RequestParam(required = false) String userId) {
+        Map<String, Object> result = forwardToAi(aiServiceUrl + "/ai/fruit/count", file);
+        saveRecord(userId, "fruit", result);
+        return result;
     }
 
-    // 把图片转发给 Python AI 服务，返回结果
     @SuppressWarnings("unchecked")
     private Map<String, Object> forwardToAi(String url, MultipartFile file) {
         try {
@@ -60,6 +66,19 @@ public class ImageController {
             err.put("code", 500);
             err.put("message", "调用AI服务失败：" + e.getMessage());
             return err;
+        }
+    }
+
+    private void saveRecord(String userId, String type, Map<String, Object> result) {
+        if (userId == null || userId.isEmpty()) return;
+        try {
+            DetectRecord record = new DetectRecord();
+            record.setUserId(userId);
+            record.setType(type);
+            record.setResultJson(result.toString().replace("?", "?"));
+            detectRecordRepository.save(record);
+        } catch (Exception e) {
+            System.out.println("保存识别记录失败：" + e.getMessage());
         }
     }
 }
