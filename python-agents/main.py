@@ -41,3 +41,24 @@ async def count_fruit(file: UploadFile = File(...)):
             ]
         }
     }
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+XF_APPID = os.getenv("XF_APPID", "")
+XF_APIKEY = os.getenv("XF_APIKEY", "")
+XF_APISECRET = os.getenv("XF_APISECRET", "")
+
+
+@app.post("/ai/voice/transcribe")
+async def voice_transcribe(file: UploadFile = File(...)):
+    # 基础版：返回 Mock 文本
+    # 升级版：调用讯飞方言识别大模型
+    return {
+        "code": 0,
+        "message": "success",
+        "data": {
+            "text": "今天给番茄浇了水，叶片有点发黄"
+        }
+    }
