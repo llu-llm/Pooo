@@ -29,6 +29,29 @@
 .input {
   font-size: 32rpx;
   color: #333;
+  flex: 1;
+}
+
+.hint {
+  display: block;
+  font-size: 22rpx;
+  color: #bbb;
+  margin-top: 10rpx;
+}
+
+.input-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.unit-picker {
+  font-size: 28rpx;
+  color: #4CAF50;
+  padding: 8rpx 20rpx;
+  border: 1rpx solid #4CAF50;
+  border-radius: 8rpx;
+  margin-left: 20rpx;
 }
 
 .btn {

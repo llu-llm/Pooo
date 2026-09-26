@@ -4,11 +4,25 @@
   <view class="form-item">
     <text class="label">兑水比例</text>
     <input class="input" placeholder="例如 1:500" value="{{ratio}}" bindinput="onRatioInput" />
+    <text class="hint">比例范围：50 ~ 5000</text>
   </view>
 
   <view class="form-item">
-    <text class="label">目标药液量（L）</text>
-    <input class="input" type="digit" placeholder="例如 10" value="{{volume}}" bindinput="onVolumeInput" />
+    <text class="label">目标药液量</text>
+    <view class="input-row">
+      <input class="input" type="digit" placeholder="例如 10" value="{{volume}}" bindinput="onVolumeInput" />
+      <picker mode="selector" range="{{volumeUnits}}" value="{{volumeUnitIndex}}" bindchange="onVolumeUnitChange">
+        <view class="unit-picker">{{volumeUnits[volumeUnitIndex]}} ▾</view>
+      </picker>
+    </view>
+    <text class="hint">药液量范围：1 ~ 100 L</text>
+  </view>
+
+  <view class="form-item">
+    <text class="label">药剂用量单位</text>
+    <picker mode="selector" range="{{weightUnits}}" value="{{weightUnitIndex}}" bindchange="onWeightUnitChange">
+      <view class="unit-picker">{{weightUnits[weightUnitIndex]}} ▾</view>
+    </picker>
   </view>
 
   <button class="btn" bindtap="onCalc">计算</button>

@@ -1,0 +1,23 @@
+<view class="container">
+  <view class="empty" wx:if="{{groups.length === 0}}">
+    <text>暂无历史记录</text>
+  </view>
+
+  <view class="timeline" wx:for="{{groups}}" wx:key="date" wx:for-item="group">
+    <view class="date-header">
+      <view class="date-dot"></view>
+      <text class="date-text">{{group.date}}</text>
+    </view>
+    <view class="date-items">
+      <view class="item" wx:for="{{group.items}}" wx:key="id" wx:for-item="item">
+        <view class="item-top">
+          <text class="time">{{item.recordTime}}</text>
+          <text class="category">{{item.category}}</text>
+          <text class="input-icon">{{item.inputType === 'voice' ? '🎤' : '✏️'}}</text>
+        </view>
+        <text class="title">{{item.title}}</text>
+        <text class="content" wx:if="{{item.content}}">{{item.content}}</text>
+      </view>
+    </view>
+  </view>
+</view>

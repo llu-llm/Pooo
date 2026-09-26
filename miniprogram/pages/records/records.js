@@ -25,7 +25,6 @@ Page({
         }
       },
       fail: () => {
-        // A 的 /api/records 还没上线时，这里静默失败，保持空列表
         this.setData({ records: [] });
       }
     });
@@ -37,5 +36,9 @@ Page({
 
   goManualRecord() {
     wx.navigateTo({ url: '/pages/records/record-edit/record-edit?mode=manual' });
+  },
+
+  goHistory() {
+    wx.navigateTo({ url: '/pages/records/record-history/record-history' });
   }
 });

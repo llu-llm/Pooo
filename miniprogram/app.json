@@ -1,12 +1,14 @@
 {
   "pages": [
+    "pages/fruit/fruit",
+    "pages/pesticide/pesticide",
     "pages/records/records",
     "pages/index/index",
     "pages/disease/disease",
-    "pages/pesticide/pesticide",
-    "pages/fruit/fruit",
+    
     "pages/tasks/tasks",
-    "pages/records/record-edit/record-edit"
+    "pages/records/record-edit/record-edit",
+    "pages/records/record-history/record-history"
   ],
   "window": {
     "navigationBarTitleText": "田间诊",

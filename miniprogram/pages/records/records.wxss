@@ -152,3 +152,14 @@
 .btn-manual .btn-text {
   color: #4CAF50;
 }
+
+.header-right {
+  display: flex;
+  align-items: center;
+}
+
+.btn-history {
+  font-size: 26rpx;
+  color: #4CAF50;
+  margin-left: 20rpx;
+}

@@ -2,7 +2,8 @@ Page({
   data: {
     imagePath: '',
     loading: false,
-    result: null
+    result: null,
+    qualityTip: ''
   },
 
   onChooseImage() {
@@ -14,7 +15,8 @@ Page({
         const path = res.tempFiles[0].tempFilePath;
         this.setData({
           imagePath: path,
-          result: null
+          result: null,
+          qualityTip: ''
         });
         this.uploadImage(path);
       }
@@ -33,6 +35,13 @@ Page({
           const data = JSON.parse(res.data);
           if (data.code === 0) {
             this.setData({ result: data.data });
+
+            // 质量检测提示：数量为 0 时提醒用户图片可能有问题
+            if (!data.data.count || data.data.count === 0) {
+              this.setData({ qualityTip: '未检测到果实，请检查图片是否模糊、过暗或主体过小' });
+            } else {
+              this.setData({ qualityTip: '' });
+            }
           } else {
             wx.showToast({ title: '识别失败：' + data.message, icon: 'none' });
           }
@@ -45,5 +54,9 @@ Page({
         wx.showToast({ title: '上传失败，请检查后端', icon: 'none' });
       }
     });
+  },
+
+  goHistory() {
+    wx.navigateTo({ url: '/pages/records/record-history/record-history?type=fruit' });
   }
 });
