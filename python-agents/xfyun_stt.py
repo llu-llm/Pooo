@@ -61,11 +61,12 @@ def transcribe(audio_bytes: bytes, appid: str, apikey: str, apisecret: str) -> s
     }
 
     def on_message(ws, message):
+        print("### 讯飞原始返回:", message)
         msg = json.loads(message)
         code = msg["header"]["code"]
         status = msg["header"]["status"]
         if code != 0:
-            print(f"讯飞返回错误码：{code}")
+            print(f"讯飞返回错误码：{code}，message：{msg['header'].get('message')}")
             ws.close()
             return
         payload = msg.get("payload")
@@ -75,6 +76,7 @@ def transcribe(audio_bytes: bytes, appid: str, apikey: str, apisecret: str) -> s
             for ws_item in text_obj["ws"]:
                 for cw in ws_item["cw"]:
                     result_text["text"] += cw["w"]
+            print("### 当前累计文字:", result_text["text"])
         if status == 2:
             ws.close()
 
@@ -90,9 +92,15 @@ def transcribe(audio_bytes: bytes, appid: str, apikey: str, apisecret: str) -> s
             interval = 0.04
             status = STATUS_FIRST_FRAME
 
-            for i in range(0, len(audio_bytes), frame_size):
-                buf = audio_bytes[i:i + frame_size]
-                audio = str(base64.b64encode(buf), "utf-8")
+            offset = 0
+            total = len(audio_bytes)
+            while True:
+                buf = audio_bytes[offset:offset + frame_size]
+                offset += frame_size
+                if not buf:
+                    status = STATUS_LAST_FRAME
+                else:
+                    audio = str(base64.b64encode(buf), "utf-8")
 
                 if status == STATUS_FIRST_FRAME:
                     d = {
@@ -108,7 +116,7 @@ def transcribe(audio_bytes: bytes, appid: str, apikey: str, apisecret: str) -> s
                     }
                     ws.send(json.dumps(d))
                     status = STATUS_CONTINUE_FRAME
-                else:
+                elif status == STATUS_CONTINUE_FRAME:
                     d = {
                         "header": {"status": 1, "app_id": appid},
                         "payload": {
@@ -120,13 +128,21 @@ def transcribe(audio_bytes: bytes, appid: str, apikey: str, apisecret: str) -> s
                         },
                     }
                     ws.send(json.dumps(d))
-                time.sleep(interval)
+                elif status == STATUS_LAST_FRAME:
+                    d = {
+                        "header": {"status": 2, "app_id": appid},
+                        "payload": {
+                            "audio": {
+                                "audio": "",
+                                "sample_rate": 16000,
+                                "encoding": "raw",
+                            }
+                        },
+                    }
+                    ws.send(json.dumps(d))
+                    break
 
-            d = {
-                "header": {"status": 2, "app_id": appid},
-                "payload": {"audio": {"audio": "", "sample_rate": 16000, "encoding": "raw"}},
-            }
-            ws.send(json.dumps(d))
+                time.sleep(interval)
 
         threading.Thread(target=run, daemon=True).start()
 
