@@ -8,34 +8,13 @@ def health():
     return {"code": 0, "message": "success", "data": {"status": "ok"}}
 
 
+from shennong_disease import detect_disease
+
 @app.post("/ai/disease/detect")
-async def detect_disease(file: UploadFile = File(...)):
-    return {
-        "code": 0,
-        "message": "success",
-        "data": {
-            "top3": [
-                {
-                    "disease": "番茄叶霉病",
-                    "confidence": 0.92,
-                    "symptoms": "叶片出现黄色斑块，背面可能有霉层。",
-                    "advice": "加强通风，控制湿度。"
-                },
-                {
-                    "disease": "番茄早疫病",
-                    "confidence": 0.65,
-                    "symptoms": "叶片出现褐色同心轮纹病斑。",
-                    "advice": "及时摘除病叶，喷施杀菌剂。"
-                },
-                {
-                    "disease": "番茄灰霉病",
-                    "confidence": 0.41,
-                    "symptoms": "叶尖和叶缘出现水浸状腐烂。",
-                    "advice": "降低湿度，及时清除病残体。"
-                }
-            ]
-        }
-    }
+async def detect_disease_api(file: UploadFile = File(...)):
+    image_bytes = await file.read()
+    result = detect_disease(image_bytes)
+    return {"code": 0, "message": "success", "data": result}
 
 from fruit_detector import detect_fruit
 
