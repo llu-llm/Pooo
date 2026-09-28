@@ -15,63 +15,66 @@ public class TaskController {
     @Autowired
     private TaskRepository taskRepository;
 
-    // 查询某天的任务
     @GetMapping
     public Map<String, Object> list(@RequestParam String userId,
                                     @RequestParam(required = false) String date) {
-        LocalDate d = (date == null || date.isEmpty()) ? LocalDate.now() : LocalDate.parse(date);
-        List<Task> list = taskRepository.findByUserIdAndTaskDateOrderByTaskTimeAsc(userId, d);
-        return ok(list);
+        if (isBlank(userId)) return error(400, "userId 不能为空");
+        try {
+            LocalDate d = (date == null || date.isEmpty()) ? LocalDate.now() : LocalDate.parse(date);
+            return ok(taskRepository.findByUserIdAndTaskDateOrderByTaskTimeAsc(userId, d));
+        } catch (java.time.format.DateTimeParseException e) {
+            return error(400, "date 格式必须为 yyyy-MM-dd");
+        }
     }
 
-    // 查询所有历史任务
     @GetMapping("/history")
     public Map<String, Object> history(@RequestParam String userId) {
-        List<Task> list = taskRepository.findByUserIdOrderByTaskDateDesc(userId);
-        return ok(list);
+        if (isBlank(userId)) return error(400, "userId 不能为空");
+        return ok(taskRepository.findByUserIdOrderByTaskDateDesc(userId));
     }
 
-    // 新增任务
     @PostMapping
     public Map<String, Object> add(@RequestBody Task task) {
-        if (task.getTaskDate() == null) {
-            task.setTaskDate(LocalDate.now());
-        }
-        if (task.getStatus() == null) {
-            task.setStatus(0);
-        }
-        Task saved = taskRepository.save(task);
-        return ok(saved);
+        if (task == null || isBlank(task.getUserId())) return error(400, "userId 不能为空");
+        if (isBlank(task.getTitle())) return error(400, "title 不能为空");
+        if (task.getTaskDate() == null) task.setTaskDate(LocalDate.now());
+        if (task.getStatus() == null) task.setStatus(0);
+        task.setId(null);
+        return ok(taskRepository.save(task));
     }
 
-    // 标记完成
     @PutMapping("/{id}/complete")
-    public Map<String, Object> complete(@PathVariable Long id) {
-        return taskRepository.findById(id).map(task -> {
+    public Map<String, Object> complete(@PathVariable Long id, @RequestParam String userId) {
+        if (isBlank(userId)) return error(400, "userId 不能为空");
+        return taskRepository.findByIdAndUserId(id, userId).map(task -> {
             task.setStatus(1);
-            taskRepository.save(task);
-            return ok(task);
-        }).orElseGet(() -> {
-            Map<String, Object> res = new HashMap<>();
-            res.put("code", 404);
-            res.put("message", "任务不存在");
-            return res;
-        });
+            return ok(taskRepository.save(task));
+        }).orElseGet(() -> error(404, "任务不存在"));
     }
 
-    // 删除任务
     @DeleteMapping("/{id}")
-    public Map<String, Object> delete(@PathVariable Long id) {
-        taskRepository.deleteById(id);
-        return ok(null);
+    public Map<String, Object> delete(@PathVariable Long id, @RequestParam String userId) {
+        if (isBlank(userId)) return error(400, "userId 不能为空");
+        return taskRepository.findByIdAndUserId(id, userId).map(task -> {
+            taskRepository.delete(task);
+            return ok(null);
+        }).orElseGet(() -> error(404, "任务不存在"));
     }
 
-    // 统一返回结构
+    private boolean isBlank(String value) { return value == null || value.trim().isEmpty(); }
+
     private Map<String, Object> ok(Object data) {
         Map<String, Object> res = new HashMap<>();
         res.put("code", 0);
         res.put("message", "success");
         res.put("data", data);
+        return res;
+    }
+
+    private Map<String, Object> error(int code, String msg) {
+        Map<String, Object> res = new HashMap<>();
+        res.put("code", code);
+        res.put("message", msg);
         return res;
     }
 }

@@ -9,4 +9,6 @@ public interface FarmRecordRepository extends JpaRepository<FarmRecord, Long> {
     List<FarmRecord> findByUserIdAndRecordDateOrderByRecordTimeAsc(String userId, LocalDate recordDate);
 
     List<FarmRecord> findByUserIdOrderByRecordDateDescRecordTimeDesc(String userId);
+
+    java.util.Optional<FarmRecord> findByIdAndUserId(Long id, String userId);
 }

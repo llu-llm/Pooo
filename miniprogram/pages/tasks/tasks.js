@@ -30,7 +30,7 @@ Page({
   onComplete(e) {
     const id = e.currentTarget.dataset.id;
     wx.request({
-      url: getApp().globalData.BASE_URL + '/api/tasks/' + id + '/complete',
+      url: getApp().globalData.BASE_URL + '/api/tasks/' + id + '/complete?userId=' + encodeURIComponent(USER_ID),
       method: 'PUT',
       success: () => this.loadTasks()
     });
@@ -44,7 +44,7 @@ Page({
       success: (res) => {
         if (res.confirm) {
           wx.request({
-            url: getApp().globalData.BASE_URL + '/api/tasks/' + id,
+            url: getApp().globalData.BASE_URL + '/api/tasks/' + id + '?userId=' + encodeURIComponent(USER_ID),
             method: 'DELETE',
             success: () => this.loadTasks()
           });

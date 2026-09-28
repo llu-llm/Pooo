@@ -11,4 +11,7 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
 
     // 根据用户查询所有任务
     List<Task> findByUserIdOrderByTaskDateDesc(String userId);
+
+    // 根据用户和 ID 查询，确保修改和删除时校验归属
+    java.util.Optional<Task> findByIdAndUserId(Long id, String userId);
 }
