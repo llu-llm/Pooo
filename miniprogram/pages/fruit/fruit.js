@@ -1,8 +1,11 @@
+const USER_ID = 'test001';
+
 Page({
   data: {
     imagePath: '',
     loading: false,
-    result: null
+    result: null,
+    qualityTip: ''
   },
 
   onChooseImage() {
@@ -14,7 +17,8 @@ Page({
         const path = res.tempFiles[0].tempFilePath;
         this.setData({
           imagePath: path,
-          result: null
+          result: null,
+          qualityTip: ''
         });
         this.uploadImage(path);
       }
@@ -27,12 +31,21 @@ Page({
       url: getApp().globalData.BASE_URL + '/api/fruit/count',
       filePath: filePath,
       name: 'file',
+      formData: {
+        userId: USER_ID                                    // ← 新增 userId
+      },
       success: (res) => {
         this.setData({ loading: false });
         try {
           const data = JSON.parse(res.data);
           if (data.code === 0) {
             this.setData({ result: data.data });
+
+            if (!data.data.count || data.data.count === 0) {
+              this.setData({ qualityTip: '未检测到果实，请检查图片是否模糊、过暗或主体过小' });
+            } else {
+              this.setData({ qualityTip: '' });
+            }
           } else {
             wx.showToast({ title: '识别失败：' + data.message, icon: 'none' });
           }
@@ -45,5 +58,9 @@ Page({
         wx.showToast({ title: '上传失败，请检查后端', icon: 'none' });
       }
     });
+  },
+
+  goHistory() {
+    wx.navigateTo({ url: '/pages/records/record-history/record-history?type=fruit' });
   }
 });

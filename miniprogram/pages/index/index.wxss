@@ -23,6 +23,27 @@
   margin-top: 12rpx;
 }
 
+.season-card {
+  background: linear-gradient(135deg, #4CAF50, #81C784);
+  border-radius: 20rpx;
+  padding: 30rpx;
+  margin-bottom: 40rpx;
+  color: #fff;
+}
+
+.season-title {
+  display: block;
+  font-size: 30rpx;
+  font-weight: bold;
+  margin-bottom: 12rpx;
+}
+
+.season-tip {
+  display: block;
+  font-size: 26rpx;
+  opacity: 0.9;
+}
+
 .grid {
   display: flex;
   flex-wrap: wrap;

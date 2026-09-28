@@ -11,7 +11,11 @@
 
   <view class="preview" wx:if="{{imagePath}}">
     <image class="preview-img" src="{{imagePath}}" mode="widthFix" />
-    <view class="btn-rechoose" bindtap="onChooseImage">重新选择</view>
+    <view class="quality-tip" wx:if="{{qualityTip}}">{{qualityTip}}</view>
+    <view class="btn-row">
+      <view class="btn-rechoose" bindtap="onChooseImage">重新选择</view>
+      <view class="btn-history" bindtap="goHistory">历史记录</view>
+    </view>
   </view>
 
   <view class="loading" wx:if="{{loading}}">
@@ -24,7 +28,6 @@
       <text class="count-num">{{result.count}}</text>
       <text class="count-unit">个</text>
     </view>
-
     <view class="box-info" wx:if="{{result.boxes && result.boxes.length > 0}}">
       <text class="box-title">检测框数量：{{result.boxes.length}}</text>
     </view>

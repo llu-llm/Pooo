@@ -1,6 +1,11 @@
 {
   "pages": [
     "pages/index/index",
+    "pages/records/record-history/record-history",
+    "pages/mine/mine",
+    "pages/knowledge/knowledge",
+    "pages/records/records",
+    "pages/records/record-edit/record-edit",
     "pages/disease/disease",
     "pages/pesticide/pesticide",
     "pages/fruit/fruit",
@@ -10,6 +15,26 @@
     "navigationBarTitleText": "田间诊",
     "navigationBarBackgroundColor": "#4CAF50",
     "navigationBarTextStyle": "white"
+  },
+  "tabBar": {
+    "color": "#999999",
+    "selectedColor": "#4CAF50",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/records/record-history/record-history",
+        "text": "记录"
+      },
+      {
+        "pagePath": "pages/mine/mine",
+        "text": "我的"
+      }
+    ]
   },
   "style": "v2",
   "sitemapLocation": "sitemap.json"

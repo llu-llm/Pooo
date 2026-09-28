@@ -1,0 +1,163 @@
+.container {
+  padding: 30rpx;
+  background: #f5f9f5;
+  min-height: 100vh;
+}
+
+/* 语音区 */
+.voice-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 60rpx 0;
+}
+
+.voice-tip {
+  text-align: center;
+  margin-bottom: 80rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.voice-tip text {
+  font-size: 30rpx;
+  color: #333;
+}
+
+.voice-sub-tip {
+  font-size: 24rpx;
+  color: #999;
+  margin-top: 12rpx;
+}
+
+.record-btn-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.record-btn {
+  width: 240rpx;
+  height: 240rpx;
+  border-radius: 50%;
+  background: #4CAF50;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8rpx 30rpx rgba(76, 175, 80, 0.4);
+  transition: all 0.15s;
+}
+
+.record-btn.recording {
+  background: #f44336;
+  transform: scale(1.1);
+  box-shadow: 0 8rpx 40rpx rgba(244, 67, 54, 0.5);
+}
+
+.record-icon {
+  font-size: 80rpx;
+}
+
+.record-text {
+  font-size: 26rpx;
+  color: #fff;
+  margin-top: 10rpx;
+}
+
+.record-timer {
+  margin-top: 30rpx;
+  font-size: 32rpx;
+  color: #f44336;
+  font-weight: bold;
+}
+
+.transcribe-result {
+  margin-top: 60rpx;
+  background: #fff;
+  border-radius: 20rpx;
+  padding: 30rpx;
+}
+
+.result-label {
+  display: block;
+  font-size: 26rpx;
+  color: #999;
+  margin-bottom: 16rpx;
+}
+
+.result-textarea {
+  width: 100%;
+  min-height: 160rpx;
+  font-size: 30rpx;
+  color: #333;
+  line-height: 1.6;
+}
+
+.btn-re-record {
+  margin-top: 20rpx;
+  text-align: center;
+  font-size: 28rpx;
+  color: #4CAF50;
+}
+
+/* 表单 */
+.form-section {
+  margin-top: 30rpx;
+}
+
+.form-item {
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 24rpx 30rpx;
+  margin-bottom: 20rpx;
+}
+
+.label {
+  display: block;
+  font-size: 26rpx;
+  color: #999;
+  margin-bottom: 16rpx;
+}
+
+.input {
+  font-size: 30rpx;
+  color: #333;
+}
+
+.textarea {
+  width: 100%;
+  min-height: 140rpx;
+  font-size: 30rpx;
+  color: #333;
+  line-height: 1.6;
+}
+
+.category-list {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.category-item {
+  padding: 12rpx 28rpx;
+  font-size: 26rpx;
+  color: #666;
+  background: #f0f0f0;
+  border-radius: 30rpx;
+  margin-right: 16rpx;
+  margin-bottom: 16rpx;
+}
+
+.category-item.active {
+  background: #4CAF50;
+  color: #fff;
+}
+
+.btn-save {
+  margin-top: 40rpx;
+  background: #4CAF50;
+  color: #fff;
+  border-radius: 50rpx;
+  font-size: 32rpx;
+}

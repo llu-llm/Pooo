@@ -4,38 +4,67 @@
     <text class="subtitle">上传作物图片，AI 帮你识别病虫害</text>
   </view>
 
+  <!-- 作物选择 -->
+  <view class="form-item">
+    <text class="label">作物种类（可选）</text>
+    <picker mode="selector" range="{{crops}}" value="{{cropIndex}}" bindchange="onCropChange">
+      <view class="picker-value">{{crops[cropIndex]}} ▾</view>
+    </picker>
+  </view>
+
+  <!-- 上传区域 -->
   <view class="upload-area" bindtap="onChooseImage" wx:if="{{!imagePath}}">
     <view class="upload-icon">📷</view>
     <text class="upload-text">点击拍照 / 从相册选择</text>
   </view>
 
+  <!-- 预览 -->
   <view class="preview" wx:if="{{imagePath}}">
     <image class="preview-img" src="{{imagePath}}" mode="widthFix" />
-    <view class="btn-rechoose" bindtap="onChooseImage">重新选择</view>
+    <view class="quality-tip" wx:if="{{qualityTip}}">{{qualityTip}}</view>
+    <view class="btn-row">
+      <view class="btn-rechoose" bindtap="onChooseImage">重新选择</view>
+      <view class="btn-history" bindtap="goHistory">历史记录</view>
+    </view>
   </view>
 
+  <!-- Loading -->
   <view class="loading" wx:if="{{loading}}">
     <text>AI 识别中，请稍候...</text>
   </view>
 
-  <view class="result" wx:if="{{result}}">
-    <view class="result-title">{{result.crop}} · {{result.disease}}</view>
-
-    <view class="result-row">
-      <text class="label">置信度</text>
-      <text class="value">{{result.confidence}}</text>
+  <!-- Top3 候选 -->
+  <view class="top3" wx:if="{{candidates && candidates.length > 0}}">
+    <text class="top3-title">Top{{candidates.length}} 候选病害</text>
+    <view class="candidate-list">
+      <view
+        class="candidate-item {{activeIndex === index ? 'active' : ''}}"
+        wx:for="{{candidates}}"
+        wx:key="index"
+        bindtap="onCandidateTap"
+        data-index="{{index}}"
+      >
+        <view class="candidate-top">
+          <text class="candidate-name">{{item.disease}}</text>
+          <text class="candidate-confidence">{{item.confidence}}</text>
+        </view>
+        <view class="confidence-bar">
+        </view>
+      </view>
     </view>
+  </view>
 
+  <!-- 详情（当前选中的候选） -->
+  <view class="result" wx:if="{{current}}">
+    <view class="result-title">{{current.crop}} · {{current.disease}}</view>
     <view class="result-block">
       <text class="block-title">主要症状</text>
-      <text class="block-text">{{result.symptoms}}</text>
+      <text class="block-text">{{current.symptoms}}</text>
     </view>
-
     <view class="result-block">
       <text class="block-title">处理建议</text>
-      <text class="block-text">{{result.advice}}</text>
+      <text class="block-text">{{current.advice}}</text>
     </view>
-
-    <view class="disclaimer">{{result.disclaimer}}</view>
+    <view class="disclaimer">{{current.disclaimer}}</view>
   </view>
 </view>

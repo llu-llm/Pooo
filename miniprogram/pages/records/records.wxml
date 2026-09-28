@@ -1,0 +1,46 @@
+<view class="header">
+  <text class="date">{{today}}</text>
+  <view class="header-right">
+    <text class="count">共 {{records.length}} 条记录</text>
+    <text class="btn-history" bindtap="goHistory">历史 ›</text>
+  </view>
+</view>
+
+<view class="container">
+  <view class="header">
+    <text class="date">{{today}}</text>
+    <text class="count">共 {{records.length}} 条记录</text>
+  </view>
+
+  <view class="empty" wx:if="{{records.length === 0}}">
+    <text>今天还没有农事记录</text>
+    <text class="hint">点下方按钮开始记录</text>
+  </view>
+
+  <view class="list">
+    <view class="item {{item.status === 1 ? 'done' : ''}}" wx:for="{{records}}" wx:key="id">
+      <view class="item-left">
+        <view class="item-top">
+          <text class="time">{{item.recordTime}}</text>
+          <text class="category">{{item.category}}</text>
+        </view>
+        <text class="title">{{item.title}}</text>
+        <text class="content" wx:if="{{item.content}}">{{item.content}}</text>
+      </view>
+      <view class="item-right">
+        <text class="input-type">{{item.inputType === 'voice' ? '🎤' : '✏️'}}</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="bottom-bar">
+    <view class="btn-voice" bindtap="goVoiceRecord">
+      <text class="btn-icon">🎤</text>
+      <text class="btn-text">语音记录</text>
+    </view>
+    <view class="btn-manual" bindtap="goManualRecord">
+      <text class="btn-icon">✏️</text>
+      <text class="btn-text">手动添加</text>
+    </view>
+  </view>
+</view>

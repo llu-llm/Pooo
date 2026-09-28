@@ -56,10 +56,35 @@
   border-radius: 12rpx;
 }
 
-.btn-rechoose {
+.quality-tip {
   margin-top: 20rpx;
+  font-size: 26rpx;
+  color: #ff9800;
+  text-align: center;
+  line-height: 1.5;
+}
+
+.btn-row {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20rpx;
+  padding: 0 40rpx;
+}
+
+.btn-rechoose {
   font-size: 28rpx;
   color: #4CAF50;
+}
+
+.btn-history {
+  font-size: 28rpx;
+  color: #4CAF50;
+}
+
+.btn-rechoose, .btn-history {
+  font-size: 28rpx;
+  color: #4CAF50;
+  padding: 10rpx 30rpx;
 }
 
 .loading {
