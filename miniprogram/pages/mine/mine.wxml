@@ -23,16 +23,24 @@
   </view>
 
   <view class="menu">
+    <view class="menu-item" bindtap="goKnowledge">
+      <text class="menu-icon">📚</text>
+      <text class="menu-text">知识库</text>
+      <text class="menu-arrow">›</text>
+    </view>
+
     <view class="menu-item" bindtap="showHelp">
       <text class="menu-icon">❓</text>
       <text class="menu-text">帮助与反馈</text>
       <text class="menu-arrow">›</text>
     </view>
+
     <view class="menu-item" bindtap="exportData">
-  <text class="menu-icon">📤</text>
-  <text class="menu-text">数据导出</text>
-  <text class="menu-arrow">›</text>
-</view>
+      <text class="menu-icon">📤</text>
+      <text class="menu-text">数据导出</text>
+      <text class="menu-arrow">›</text>
+    </view>
+
     <view class="menu-item" bindtap="showAbout">
       <text class="menu-icon">ℹ️</text>
       <text class="menu-text">关于我们</text>
@@ -45,4 +53,3 @@
     <text class="footer-sub">AI农业生产辅助小程序</text>
   </view>
 </view>
-

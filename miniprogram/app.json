@@ -3,6 +3,7 @@
     "pages/index/index",
     "pages/records/record-history/record-history",
     "pages/mine/mine",
+    "pages/knowledge/knowledge",
     "pages/records/records",
     "pages/records/record-edit/record-edit",
     "pages/disease/disease",

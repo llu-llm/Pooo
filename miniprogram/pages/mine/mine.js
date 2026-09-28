@@ -33,6 +33,9 @@ Page({
     });
   },
 
+  goKnowledge() {
+    wx.navigateTo({ url: '/pages/knowledge/knowledge' });
+  },
   showHelp() {
     wx.showModal({
       title: '帮助与反馈',

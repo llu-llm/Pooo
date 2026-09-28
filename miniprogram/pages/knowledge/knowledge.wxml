@@ -1,0 +1,20 @@
+<view class="container">
+  <view class="search-bar">
+    <input placeholder="搜索病虫害名称" bindinput="onSearch" />
+  </view>
+
+  <view class="list">
+    <view class="item" wx:for="{{filteredList}}" wx:key="name" bindtap="showDetail" data-index="{{index}}">
+      <view class="item-icon">{{item.icon}}</view>
+      <view class="item-content">
+        <text class="item-name">{{item.name}}</text>
+        <text class="item-crop">作物：{{item.crop}}</text>
+      </view>
+      <text class="item-arrow">›</text>
+    </view>
+  </view>
+
+  <view class="empty" wx:if="{{filteredList.length === 0}}">
+    <text>没有找到相关病虫害</text>
+  </view>
+</view>
