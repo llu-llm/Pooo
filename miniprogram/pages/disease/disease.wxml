@@ -49,7 +49,6 @@
           <text class="candidate-confidence">{{item.confidence}}</text>
         </view>
         <view class="confidence-bar">
-          <view class="confidence-fill" style="width: {{item.confidencePercent}}%"></view>
         </view>
       </view>
     </view>

@@ -10,6 +10,6 @@ Page({
     wx.navigateTo({ url: '/pages/fruit/fruit' });
   },
   goTasks() {
-    wx.navigateTo({ url: '/pages/tasks/tasks' });
+    wx.navigateTo({ url: '/pages/records/records' });
   }
 });

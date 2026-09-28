@@ -4,6 +4,33 @@
   min-height: 100vh;
 }
 
+/* 筛选 Tab */
+.filter-bar {
+  display: flex;
+  width: 100%;
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 10rpx;
+  margin-bottom: 30rpx;
+  box-sizing: border-box;
+}
+
+.filter-item {
+  flex: 1;
+  text-align: center;
+  font-size: 24rpx;
+  color: #666;
+  padding: 16rpx 0;
+  border-radius: 10rpx;
+  margin: 0 4rpx;
+  box-sizing: border-box;
+}
+.filter-item.active {
+  background: #4CAF50;
+  color: #fff;
+}
+
+/* 空状态 */
 .empty {
   text-align: center;
   padding: 200rpx 0;
@@ -11,6 +38,7 @@
   color: #999;
 }
 
+/* 时间轴 */
 .timeline {
   margin-bottom: 40rpx;
 }
@@ -51,38 +79,30 @@
 .item-top {
   display: flex;
   align-items: center;
-  margin-bottom: 10rpx;
+  margin-bottom: 12rpx;
 }
 
-.time {
-  font-size: 24rpx;
-  color: #4CAF50;
+.item-icon {
+  font-size: 36rpx;
   margin-right: 16rpx;
 }
 
-.category {
-  font-size: 22rpx;
-  color: #fff;
-  background: #4CAF50;
-  padding: 2rpx 14rpx;
-  border-radius: 20rpx;
-  margin-right: 12rpx;
+.item-time {
+  font-size: 24rpx;
+  color: #999;
 }
 
-.input-icon {
-  font-size: 28rpx;
-}
-
-.title {
+.item-title {
   display: block;
   font-size: 30rpx;
   color: #333;
   margin-bottom: 8rpx;
 }
 
-.content {
+.item-summary {
   display: block;
   font-size: 26rpx;
-  color: #999;
+  color: #666;
   line-height: 1.5;
+  margin-top: 6rpx;
 }

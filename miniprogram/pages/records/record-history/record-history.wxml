@@ -1,8 +1,23 @@
 <view class="container">
-  <view class="empty" wx:if="{{groups.length === 0}}">
-    <text>暂无历史记录</text>
+  <!-- 顶部筛选 Tab -->
+  <view class="filter-bar">
+    <view
+      class="filter-item {{activeType === item.value ? 'active' : ''}}"
+      wx:for="{{filterTypes}}"
+      wx:key="value"
+      bindtap="onFilterChange"
+      data-type="{{item.value}}"
+    >
+      {{item.label}}
+    </view>
   </view>
 
+  <!-- 空状态 -->
+  <view class="empty" wx:if="{{groups.length === 0}}">
+    <text>暂无记录</text>
+  </view>
+
+  <!-- 时间轴 -->
   <view class="timeline" wx:for="{{groups}}" wx:key="date" wx:for-item="group">
     <view class="date-header">
       <view class="date-dot"></view>
@@ -11,12 +26,11 @@
     <view class="date-items">
       <view class="item" wx:for="{{group.items}}" wx:key="id" wx:for-item="item">
         <view class="item-top">
-          <text class="time">{{item.recordTime}}</text>
-          <text class="category">{{item.category}}</text>
-          <text class="input-icon">{{item.inputType === 'voice' ? '🎤' : '✏️'}}</text>
+          <text class="item-icon">{{item.icon}}</text>
+          <text class="item-time">{{item.time}}</text>
         </view>
-        <text class="title">{{item.title}}</text>
-        <text class="content" wx:if="{{item.content}}">{{item.content}}</text>
+        <text class="item-title">{{item.title}}</text>
+        <text class="item-summary" wx:if="{{item.summary}}">{{item.summary}}</text>
       </view>
     </view>
   </view>

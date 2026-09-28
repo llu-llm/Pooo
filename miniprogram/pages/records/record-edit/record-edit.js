@@ -42,7 +42,7 @@ Page({
       duration: 60000,
       sampleRate: 16000,
       numberOfChannels: 1,
-      encodeBitRate: 256000,
+      encodeBitRate: 48000,
       format: 'pcm',
       frameSize: 50
     });
@@ -63,6 +63,7 @@ Page({
   },
 
   uploadVoice(filePath) {
+    console.log('准备上传，文件路径：', filePath);
     wx.showLoading({ title: '识别中...' });
     wx.uploadFile({
       url: getApp().globalData.BASE_URL + '/api/records/voice',
@@ -70,6 +71,7 @@ Page({
       name: 'file',
       formData: { userId: USER_ID },
       success: (res) => {
+        console.log('上传成功，返回：', res.data);
         wx.hideLoading();
         try {
           const data = JSON.parse(res.data);
@@ -86,7 +88,8 @@ Page({
           wx.showToast({ title: '解析失败', icon: 'none' });
         }
       },
-      fail: () => {
+      fail: (err) => {
+        console.log('上传失败：', err);
         wx.hideLoading();
         wx.showToast({ title: '上传失败，请检查后端', icon: 'none' });
       }
@@ -143,6 +146,19 @@ Page({
       fail: () => {
         wx.hideLoading();
         wx.showToast({ title: '保存失败，请检查后端', icon: 'none' });
+      }
+    });
+  },
+
+  // 测试上传按钮（仅电脑调试用）
+  testUpload() {
+    wx.chooseMedia({
+      count: 1,
+      mediaType: ['image'],
+      success: (res) => {
+        const path = res.tempFiles[0].tempFilePath;
+        console.log('测试上传，文件路径：', path);
+        this.uploadVoice(path);
       }
     });
   },

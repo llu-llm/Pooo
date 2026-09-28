@@ -67,3 +67,4 @@
     <button class="btn-save" bindtap="onSave">保存记录</button>
   </view>
 </view>
+<view class="test-btn" bindtap="testUpload">测试上传（仅电脑用）</view>
