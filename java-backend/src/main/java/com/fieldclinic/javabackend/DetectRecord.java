@@ -4,17 +4,20 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "detect_record")
+@Table(name = "detect_record", indexes = {
+        @Index(name = "idx_detect_user_created", columnList = "user_id,created_at"),
+        @Index(name = "idx_detect_user_type_created", columnList = "user_id,type,created_at")
+})
 public class DetectRecord {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "user_id", length = 64)
+    @Column(name = "user_id", nullable = false, length = 64)
     private String userId;
 
-    @Column(name = "type", length = 20)
+    @Column(name = "type", nullable = false, length = 20)
     private String type;  // disease / fruit
 
     @Column(name = "result_json", columnDefinition = "TEXT")

@@ -1,7 +1,6 @@
 package com.fieldclinic.javabackend;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
@@ -91,8 +90,8 @@ public class ImageController {
             record.setType(type);
             record.setResultJson(objectMapper.writeValueAsString(result));
             detectRecordRepository.save(record);
-        } catch (JsonProcessingException ignored) {
-            // 识别结果无法序列化时不阻断主流程
+        } catch (Exception ignored) {
+            // 识别结果无法序列化或保存时不阻断主流程
         }
     }
 
