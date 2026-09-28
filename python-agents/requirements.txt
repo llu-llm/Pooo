@@ -1,3 +1,10 @@
 fastapi
 uvicorn[standard]
 python-multipart
+websockets
+python-dotenv
+websocket-client
+opencv-python
+numpy
+pillow
+ultralytics
