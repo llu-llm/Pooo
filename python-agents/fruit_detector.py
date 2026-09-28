@@ -3,15 +3,23 @@ import numpy as np
 from PIL import Image
 from ultralytics import YOLO
 
-# 第一次运行会自动下载 yolov8n.pt（约 6MB）
-model = YOLO("yolov8n.pt")
+model = YOLO(r"D:\Users\29269\Documents\GitHub\Pooo\python-agents\best.pt")
 
 
 def detect_fruit(image_bytes: bytes) -> dict:
     img = Image.open(io.BytesIO(image_bytes)).convert("RGB")
     arr = np.array(img)
 
-    results = model(arr)
+    results = model(arr, conf=0.25)
+
+    # ===== 调试：打印原始输出 =====
+    for r in results:
+        print("### 原始 boxes.cls:", r.boxes.cls.tolist())
+        print("### 原始 boxes.conf:", r.boxes.conf.tolist())
+        print("### 原始 boxes.xyxy:", r.boxes.xyxy.tolist())
+        print("### model.names:", model.names)
+    # =============================
+
     boxes = []
     count = 0
 
