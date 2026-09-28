@@ -1,21 +1,39 @@
 {
   "pages": [
     "pages/index/index",
-    "pages/disease/disease",
-    "pages/fruit/fruit",
-    "pages/pesticide/pesticide",
+    "pages/records/record-history/record-history",
+    "pages/mine/mine",
     "pages/records/records",
-    
-    
-    
-    "pages/tasks/tasks",
     "pages/records/record-edit/record-edit",
-    "pages/records/record-history/record-history"
+    "pages/disease/disease",
+    "pages/pesticide/pesticide",
+    "pages/fruit/fruit",
+    "pages/tasks/tasks"
   ],
   "window": {
     "navigationBarTitleText": "田间诊",
     "navigationBarBackgroundColor": "#4CAF50",
     "navigationBarTextStyle": "white"
+  },
+  "tabBar": {
+    "color": "#999999",
+    "selectedColor": "#4CAF50",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/records/record-history/record-history",
+        "text": "记录"
+      },
+      {
+        "pagePath": "pages/mine/mine",
+        "text": "我的"
+      }
+    ]
   },
   "style": "v2",
   "sitemapLocation": "sitemap.json"
