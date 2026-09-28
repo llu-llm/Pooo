@@ -29,7 +29,7 @@ public class ImageController {
 
     @PostMapping("/disease/detect")
     public Map<String, Object> detectDisease(@RequestParam("file") MultipartFile file,
-                                             @RequestParam(required = false) String userId) {
+                                             @RequestParam(value = "userId", required = false) String userId) {
         Map<String, Object> result = forwardToAi(aiServiceUrl + "/ai/disease/detect", file);
         saveRecord(userId, "disease", result);
         return result;
@@ -37,7 +37,7 @@ public class ImageController {
 
     @PostMapping("/fruit/count")
     public Map<String, Object> countFruit(@RequestParam("file") MultipartFile file,
-                                          @RequestParam(required = false) String userId) {
+                                          @RequestParam(value = "userId", required = false) String userId) {
         Map<String, Object> result = forwardToAi(aiServiceUrl + "/ai/fruit/count", file);
         saveRecord(userId, "fruit", result);
         return result;
@@ -71,14 +71,61 @@ public class ImageController {
 
     private void saveRecord(String userId, String type, Map<String, Object> result) {
         if (userId == null || userId.isEmpty()) return;
+        if (result == null) return;
+
+        // AI 调用失败不入库
+        Object code = result.get("code");
+        if (code != null && !"0".equals(String.valueOf(code)) && !"200".equals(String.valueOf(code))) {
+            System.out.println("AI 服务返回异常，跳过入库：" + result.get("message"));
+            return;
+        }
+
         try {
             DetectRecord record = new DetectRecord();
             record.setUserId(userId);
             record.setType(type);
-            record.setResultJson(result.toString().replace("?", "?"));
+            record.setResultJson(toJson(result));   // 手动序列化
+
+            Object thumb = result.get("thumbnail");
+            if (thumb == null) thumb = result.get("imageUrl");
+            if (thumb != null) record.setThumbnail(String.valueOf(thumb));
+
             detectRecordRepository.save(record);
         } catch (Exception e) {
             System.out.println("保存识别记录失败：" + e.getMessage());
         }
+    }
+
+    /** 简易 Map -> JSON 字符串，不依赖任何 JSON 库 */
+    @SuppressWarnings("unchecked")
+    private String toJson(Map<String, Object> map) {
+        if (map == null) return "{}";
+        StringBuilder sb = new StringBuilder("{");
+        boolean first = true;
+        for (Map.Entry<String, Object> e : map.entrySet()) {
+            if (!first) sb.append(",");
+            first = false;
+            sb.append("\"").append(escape(e.getKey())).append("\":");
+            Object v = e.getValue();
+            if (v == null) {
+                sb.append("null");
+            } else if (v instanceof Number || v instanceof Boolean) {
+                sb.append(v);
+            } else if (v instanceof Map) {
+                sb.append(toJson((Map<String, Object>) v));
+            } else {
+                sb.append("\"").append(escape(v.toString())).append("\"");
+            }
+        }
+        sb.append("}");
+        return sb.toString();
+    }
+
+    private String escape(String s) {
+        return s.replace("\\", "\\\\")
+                .replace("\"", "\\\"")
+                .replace("\n", "\\n")
+                .replace("\r", "\\r")
+                .replace("\t", "\\t");
     }
 }

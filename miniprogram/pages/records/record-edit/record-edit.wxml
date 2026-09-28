@@ -1,0 +1,70 @@
+<view class="container">
+  <!-- 语音模式 -->
+  <view class="voice-section" wx:if="{{mode === 'voice' && !transcribedText}}">
+    <view class="voice-tip">
+      <text>长按下方按钮，说出你的农事记录</text>
+      <text class="voice-sub-tip">支持普通话和方言</text>
+    </view>
+
+    <view class="record-btn-area">
+      <view
+        class="record-btn {{isRecording ? 'recording' : ''}}"
+        bindtouchstart="onRecordStart"
+        bindtouchend="onRecordEnd"
+        bindtouchcancel="onRecordCancel"
+      >
+        <text class="record-icon">🎤</text>
+        <text class="record-text">{{isRecording ? '松开 结束' : '按住 说话'}}</text>
+      </view>
+      <view class="record-timer" wx:if="{{isRecording}}">
+        <text>{{recordTime}} 秒</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 语音识别结果 -->
+  <view class="transcribe-result" wx:if="{{mode === 'voice' && transcribedText}}">
+    <text class="result-label">识别结果（可编辑）</text>
+    <textarea
+      class="result-textarea"
+      value="{{transcribedText}}"
+      bindinput="onTextInput"
+      placeholder="识别结果会出现在这里"
+    ></textarea>
+    <view class="btn-re-record" bindtap="onReRecord">重新录音</view>
+  </view>
+
+  <!-- 表单区（手动模式 或 语音已识别） -->
+  <view class="form-section" wx:if="{{mode === 'manual' || transcribedText}}">
+    <view class="form-item">
+      <text class="label">标题</text>
+      <input class="input" placeholder="如：给番茄浇水" value="{{title}}" bindinput="onTitleInput" />
+    </view>
+
+    <view class="form-item">
+      <text class="label">分类</text>
+      <view class="category-list">
+        <view
+          class="category-item {{category === item ? 'active' : ''}}"
+          wx:for="{{categories}}"
+          wx:key="*this"
+          bindtap="onCategorySelect"
+          data-category="{{item}}"
+        >{{item}}</view>
+      </view>
+    </view>
+
+    <view class="form-item">
+      <text class="label">详细内容</text>
+      <textarea
+        class="textarea"
+        placeholder="补充说明（可选）"
+        value="{{content}}"
+        bindinput="onContentInput"
+      ></textarea>
+    </view>
+
+    <button class="btn-save" bindtap="onSave">保存记录</button>
+  </view>
+</view>
+<view class="test-btn" bindtap="testUpload">测试上传（仅电脑用）</view>

@@ -8,3 +8,6 @@ opencv-python
 numpy
 pillow
 ultralytics
+openai
+requests
+scipy

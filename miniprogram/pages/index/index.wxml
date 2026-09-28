@@ -4,6 +4,11 @@
     <text class="subtitle">AI农业生产辅助</text>
   </view>
 
+  <view class="season-card">
+    <view class="season-title">🍎 苹果树 · 当前阶段：{{seasonName}}</view>
+    <view class="season-tip">推荐：{{recommend}}</view>
+  </view>
+
   <view class="grid">
     <view class="cell" bindtap="goDisease">
       <view class="icon">📷</view>

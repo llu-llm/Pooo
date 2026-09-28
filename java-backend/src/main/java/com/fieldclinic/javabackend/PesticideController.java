@@ -1,13 +1,20 @@
 package com.fieldclinic.javabackend;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
 @RestController
 @RequestMapping("/api/pesticide")
 public class PesticideController {
+
+    @Autowired
+    private FarmRecordRepository farmRecordRepository;
 
     @PostMapping("/calc")
     public Map<String, Object> calc(@RequestBody Map<String, Object> body) {
@@ -61,6 +68,22 @@ public class PesticideController {
             data.put("ratioUsed", "1:" + ratioDenominator);
             data.put("targetVolume", targetVolume + volumeUnit);
             data.put("disclaimer", "本结果仅依据兑水比例进行数学计算，请以农药产品标签和当地植保部门指导为准。");
+
+            // ===== 新增：若传了 userId，则保存到农事记录 =====
+            String userId = body.get("userId") != null ? body.get("userId").toString() : null;
+            if (userId != null && !userId.isEmpty()) {
+                FarmRecord record = new FarmRecord();
+                record.setUserId(userId);
+                record.setTitle("配药计算");
+                record.setContent("配药 " + targetVolume + volumeUnit + "（1:" + ratioDenominator + "）");
+                record.setCategory("打药");
+                record.setInputType("calc");
+                record.setRecordDate(LocalDate.now());
+                record.setRecordTime(LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm")));
+                record.setStatus(1);   // 已完成
+                farmRecordRepository.save(record);
+            }
+            // ===== 新增结束 =====
 
             Map<String, Object> res = new HashMap<>();
             res.put("code", 0);
