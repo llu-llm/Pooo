@@ -1,0 +1,107 @@
+.container {
+  padding: 30rpx;
+  background: #f5f9f5;
+  min-height: 100vh;
+  padding-bottom: 140rpx;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30rpx;
+}
+
+.date {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #2e7d32;
+}
+
+.count {
+  font-size: 26rpx;
+  color: #999;
+}
+
+.empty {
+  text-align: center;
+  color: #999;
+  font-size: 28rpx;
+  padding: 80rpx 0;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+}
+
+.item {
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 24rpx 30rpx;
+  margin-bottom: 20rpx;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.item.done {
+  opacity: 0.5;
+}
+
+.item.done .title {
+  text-decoration: line-through;
+}
+
+.item-left {
+  flex: 1;
+}
+
+.time {
+  display: block;
+  font-size: 24rpx;
+  color: #4CAF50;
+  margin-bottom: 8rpx;
+}
+
+.title {
+  display: block;
+  font-size: 32rpx;
+  color: #333;
+}
+
+.item-right {
+  display: flex;
+  gap: 16rpx;
+}
+
+.btn-complete {
+  font-size: 26rpx;
+  color: #4CAF50;
+  border: 1rpx solid #4CAF50;
+  padding: 8rpx 20rpx;
+  border-radius: 8rpx;
+}
+
+.btn-delete {
+  font-size: 26rpx;
+  color: #f44336;
+  border: 1rpx solid #f44336;
+  padding: 8rpx 20rpx;
+  border-radius: 8rpx;
+}
+
+.add-btn {
+  position: fixed;
+  bottom: 40rpx;
+  left: 30rpx;
+  right: 30rpx;
+  height: 88rpx;
+  line-height: 88rpx;
+  text-align: center;
+  background: #4CAF50;
+  color: #fff;
+  font-size: 32rpx;
+  border-radius: 44rpx;
+  box-shadow: 0 4rpx 20rpx rgba(76, 175, 80, 0.4);
+}

@@ -1,0 +1,25 @@
+<view class="container">
+  <view class="header">
+    <text class="date">{{today}}</text>
+    <text class="count">共 {{tasks.length}} 项任务</text>
+  </view>
+
+  <view class="empty" wx:if="{{tasks.length === 0}}">
+    <text>今天还没有任务，点下方按钮添加吧</text>
+  </view>
+
+  <view class="list">
+    <view class="item {{item.status === 1 ? 'done' : ''}}" wx:for="{{tasks}}" wx:key="id">
+      <view class="item-left">
+        <text class="time">{{item.taskTime}}</text>
+        <text class="title">{{item.title}}</text>
+      </view>
+      <view class="item-right">
+        <view class="btn-complete" wx:if="{{item.status === 0}}" bindtap="onComplete" data-id="{{item.id}}">完成</view>
+        <view class="btn-delete" bindtap="onDelete" data-id="{{item.id}}">删除</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="add-btn" bindtap="onAdd">+ 添加任务</view>
+</view>

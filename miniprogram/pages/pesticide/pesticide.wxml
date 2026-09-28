@@ -1,0 +1,27 @@
+<view class="container">
+  <view class="title">农药兑水计算</view>
+
+  <view class="form-item">
+    <text class="label">兑水比例</text>
+    <input class="input" placeholder="例如 1:500" value="{{ratio}}" bindinput="onRatioInput" />
+  </view>
+
+  <view class="form-item">
+    <text class="label">目标药液量（L）</text>
+    <input class="input" type="digit" placeholder="例如 10" value="{{volume}}" bindinput="onVolumeInput" />
+  </view>
+
+  <button class="btn" bindtap="onCalc">计算</button>
+
+  <view class="result" wx:if="{{result}}">
+    <view class="result-item">
+      <text class="result-label">药剂用量</text>
+      <text class="result-value">{{result.pesticideAmount}} {{result.pesticideUnit}}</text>
+    </view>
+    <view class="result-item">
+      <text class="result-label">清水用量</text>
+      <text class="result-value">{{result.waterAmount}} {{result.waterUnit}}</text>
+    </view>
+    <view class="disclaimer">{{result.disclaimer}}</view>
+  </view>
+</view>
